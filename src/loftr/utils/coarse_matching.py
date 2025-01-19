@@ -5,6 +5,7 @@ from einops.einops import rearrange
 
 INF = 1e9
 
+
 def mask_border(m, b: int, v):
     """ Mask borders with value
     Args:
@@ -45,7 +46,7 @@ def mask_border_with_padding(m, bd, v, p_m0, p_m1):
 
 def compute_max_candidates(p_m0, p_m1):
     """Compute the max candidates of all pairs within a batch
-    
+
     Args:
         p_m0, p_m1 (torch.Tensor): padded masks
     """
@@ -106,7 +107,7 @@ class CoarseMatching(nn.Module):
         N, L, S, C = feat_c0.size(0), feat_c0.size(1), feat_c1.size(1), feat_c0.size(2)
 
         # normalize
-        feat_c0, feat_c1 = map(lambda feat: feat / feat.shape[-1]**.5,
+        feat_c0, feat_c1 = map(lambda feat: feat / feat.shape[-1] ** .5,
                                [feat_c0, feat_c1])
 
         if self.match_type == 'dual_softmax':
@@ -185,8 +186,8 @@ class CoarseMatching(nn.Module):
 
         # 2. mutual nearest
         mask = mask \
-            * (conf_matrix == conf_matrix.max(dim=2, keepdim=True)[0]) \
-            * (conf_matrix == conf_matrix.max(dim=1, keepdim=True)[0])
+               * (conf_matrix == conf_matrix.max(dim=2, keepdim=True)[0]) \
+               * (conf_matrix == conf_matrix.max(dim=1, keepdim=True)[0])
 
         # 3. find all valid coarse matches
         # this only works when at most one `True` in each row
@@ -218,15 +219,15 @@ class CoarseMatching(nn.Module):
             else:
                 pred_indices = torch.randint(
                     num_matches_pred,
-                    (num_matches_train - self.train_pad_num_gt_min, ),
+                    (num_matches_train - self.train_pad_num_gt_min,),
                     device=_device)
 
             # gt_pad_indices is to select from gt padding. e.g. max(3787-4800, 200)
             gt_pad_indices = torch.randint(
-                    len(data['spv_b_ids']),
-                    (max(num_matches_train - num_matches_pred,
-                        self.train_pad_num_gt_min), ),
-                    device=_device)
+                len(data['spv_b_ids']),
+                (max(num_matches_train - num_matches_pred,
+                     self.train_pad_num_gt_min),),
+                device=_device)
             mconf_gt = torch.zeros(len(data['spv_b_ids']), device=_device)  # set conf of gt paddings to all zero
 
             b_ids, i_ids, j_ids, mconf = map(
