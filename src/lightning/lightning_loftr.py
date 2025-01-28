@@ -41,6 +41,7 @@ class PL_LoFTR(pl.LightningModule):
         # Matcher: LoFTR
         self.matcher = LoFTR(config=_config['loftr'])
         self.loss = LoFTRLoss(_config)
+        pl.seed_everything(seed=40, workers=True)
 
         # Pretrained weights
         if pretrained_ckpt:

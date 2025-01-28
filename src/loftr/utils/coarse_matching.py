@@ -171,6 +171,7 @@ class CoarseMatching(nn.Module):
             'h1c': data['hw1_c'][0],
             'w1c': data['hw1_c'][1]
         }
+
         _device = conf_matrix.device
         # 1. confidence thresholding
         mask = conf_matrix > self.thr
@@ -181,8 +182,7 @@ class CoarseMatching(nn.Module):
         else:
             mask_border_with_padding(mask, self.border_rm, False,
                                      data['mask0'], data['mask1'])
-        mask = rearrange(mask, 'b h0c w0c h1c w1c -> b (h0c w0c) (h1c w1c)',
-                         **axes_lengths)
+        mask = rearrange(mask, 'b h0c w0c h1c w1c -> b (h0c w0c) (h1c w1c)', **axes_lengths)
 
         # 2. mutual nearest
         mask = mask \
