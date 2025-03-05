@@ -99,6 +99,7 @@ class CoarseMatching(nn.Module):
                 'i_ids' (torch.Tensor): [M'],
                 'j_ids' (torch.Tensor): [M'],
                 'gt_mask' (torch.Tensor): [M'],
+
                 'mkpts0_c' (torch.Tensor): [M, 2],
                 'mkpts1_c' (torch.Tensor): [M, 2],
                 'mconf' (torch.Tensor): [M]}
